@@ -10,10 +10,7 @@ import UIKit
 import Firebase
 
 
-class ChatViewController: UIViewController {
-    
-    // Declare instance variables here
-
+class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // We've pre-linked the IBOutlets
     @IBOutlet var heightConstraint: NSLayoutConstraint!
@@ -21,13 +18,15 @@ class ChatViewController: UIViewController {
     @IBOutlet var messageTextfield: UITextField!
     @IBOutlet var messageTableView: UITableView!
     
+    // Declare instance variables here
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //TODO: Set yourself as the delegate and datasource here:
-        
+        messageTableView.dataSource = self;
+        messageTableView.delegate = self;
         
         
         //TODO: Set yourself as the delegate of the text field here:
@@ -39,7 +38,9 @@ class ChatViewController: UIViewController {
         
 
         //TODO: Register your MessageCell.xib file here:
-
+        messageTableView.register(UINib(nibName: "MessageCell", bundle: nil), forCellReuseIdentifier: "customMessageCell");
+        
+        configureTableView();
         
     }
 
@@ -47,13 +48,24 @@ class ChatViewController: UIViewController {
     
     //MARK: - TableView DataSource Methods
     
-    
-    
     //TODO: Declare cellForRowAtIndexPath here:
-    
+    let msgArray = ["first msg", "second msg", "third msg"];
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("section: \(indexPath.section)");
+        print("row: \(indexPath.row)");
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "customMessageCell", for: indexPath) as! CustomMessageCell;
+        cell.messageBody.text = msgArray[indexPath.row]
+        
+        return cell;
+        
+    }
     
     
     //TODO: Declare numberOfRowsInSection here:
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return msgArray.count;
+    }
     
     
     
@@ -62,6 +74,10 @@ class ChatViewController: UIViewController {
     
     
     //TODO: Declare configureTableView here:
+    func configureTableView() {
+        messageTableView.rowHeight = UITableView.automaticDimension;
+        messageTableView.estimatedRowHeight = 120.0;
+    }
     
     
     
